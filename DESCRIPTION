@@ -1,0 +1,10 @@
+Package: RMicroBREW
+Type: Package
+Title: Automated pipeline to quantify yeast replicative lifespan (Title Case)
+Version: 0.1.0
+Author: Bishal Paudel, Karolina Kisiel
+Maintainer: Bishal Paudel <paudelbb@gmail.com>
+Description: This package takes in output files (CSV) from Matlab algorithms that analyze high-throughput images from yeast replicative lifespan experiments. The output file has information as columns the frameID, intensity of the mother cell trap, and intensities from three shapes that mother cells bud from. 
+Depends: pracma, survival, mclust
+Encoding: UTF-8
+LazyData: true
