@@ -1,4 +1,4 @@
-MicroBrew_count <- function(filename, save_file){
+MicroBREW_count <- function(filename, save_file){
 
   min_trap_size = 8000
   max_trap_size = 13000
