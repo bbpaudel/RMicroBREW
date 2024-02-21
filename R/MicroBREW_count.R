@@ -26,19 +26,17 @@ MicroBREW_count <- function(filename, save_file){
   table_values <- data.frame()
   peak_values <- data.frame()
   keep_data <- data.frame()
-
   unique_ids <- unique(table_xy$trap_new_ID)
-
   for(id in unique_ids){
     temp <- subset(table_xy, trap_new_ID == id)
-    temp$avg_center <- movavg(temp$intensity_table3, n = 6, type = "s")
+    temp$avg_center <- movavg(temp$intensity_table3, n = 5, type = "s")
     temp$norm_signal <- temp$avg_center / temp$avg_center[temp$intensity_table1 == min(temp$intensity_table1)]
     peaks_mother_cell <- findpeaks(temp$norm_signal, nups = 4, ndowns = 1, minpeakheight = 3)
     mother_cell_entry <- temp$intensity_table1[peaks_mother_cell[1,2]]
     temp1 <- subset(temp, intensity_table1 >= mother_cell_entry)
     temp1$norm_signal <- NULL
 
-    if(length(mother_cell_entry) > 0 & nrow(temp1) > 0){
+    if(length(mother_cell_entry) > 0 & nrow(temp1) > 6){
       temp1$avg_shape1 <- movavg(temp1$intensity_table4, n = 6, type = "s")
       temp1$avg_shape2 <- movavg(temp1$intensity_table5, n = 6, type = "s")
       temp1$avg_shape3 <- movavg(temp1$intensity_table6, n = 6, type = "s")
@@ -56,6 +54,20 @@ MicroBREW_count <- function(filename, save_file){
                         shape2 = ifelse(length(peaks_shape2) == 0, 0, length(peaks_shape2)),
                         shape3 = ifelse(length(peaks_shape3) == 0, 0, length(peaks_shape3)))
 
+      if(length(peaks_shape1) == 0){
+        peaks_shape1 = matrix(data = 0, nrow = 1, ncol = 4)
+      }
+      else{peaks_shape1 = peaks_shape1}
+
+      if(length(peaks_shape2) == 0){
+        peaks_shape2 = matrix(data = 0, nrow = 1, ncol = 4)
+      }
+      else{peaks_shape2 = peaks_shape2}
+      if(length(peaks_shape3) == 0){
+        peaks_shape3 = matrix(data = 0, nrow = 1, ncol = 4)
+      }
+      else{peaks_shape3 = peaks_shape3}
+
       peaks_all <- rbind(data.frame(peaks_shape1, type = "shape1"),
                          data.frame(peaks_shape2, type = "shape2"),
                          data.frame(peaks_shape3, type = "shape3"))
@@ -65,7 +77,7 @@ MicroBREW_count <- function(filename, save_file){
       temp1$value_pass <- ifelse(temp1$sum_value < 0, "yes", "no")
       temp2 <- subset(temp1, intensity_table1 > (mother_cell_entry + 50) & value_pass == "yes")
 
-      peaks_all$death_frame <- ifelse(nrow(temp2) == 0, max(temp2$intensity_table2), min(temp2$intensity_table1))
+      peaks_all$death_frame <- ifelse(nrow(temp2) == 0, max(temp1$intensity_table1), min(temp2$intensity_table1))
       peaks_all <- subset(peaks_all, peak_location <= death_frame)
       keep_data <- rbind(keep_data, temp1)
       table_values <- rbind(table_values, ptf)
