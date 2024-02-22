@@ -31,7 +31,7 @@ MicroBREW_count <- function(filename, save_file){
     temp <- subset(table_xy, trap_new_ID == id)
     temp$avg_center <- movavg(temp$intensity_table3, n = 5, type = "s")
     temp$norm_signal <- temp$avg_center / temp$avg_center[temp$intensity_table1 == min(temp$intensity_table1)]
-    peaks_mother_cell <- findpeaks(temp$norm_signal, nups = 4, ndowns = 1, minpeakheight = 3)
+    peaks_mother_cell <- findpeaks(temp$norm_signal, nups = 4, ndowns = 1, minpeakheight = 5)
     mother_cell_entry <- temp$intensity_table1[peaks_mother_cell[1,2]]
     temp1 <- subset(temp, intensity_table1 >= mother_cell_entry)
     temp1$norm_signal <- NULL
@@ -45,9 +45,9 @@ MicroBREW_count <- function(filename, save_file){
       temp1$diff <- lag_difference
       temp1$sum_value <- temp1$intensity_table3 + temp1$diff
 
-      peaks_shape1 <- findpeaks(temp1$avg_shape1, nups = 4, ndowns = 1, minpeakdistance = 6)
-      peaks_shape2 <- findpeaks(temp1$avg_shape2, nups = 4, ndowns = 1, minpeakdistance = 6)
-      peaks_shape3 <- findpeaks(temp1$avg_shape3, nups = 4, ndowns = 1, minpeakdistance = 6)
+      peaks_shape1 <- findpeaks(temp1$avg_shape1, nups = 5, ndowns = 1, minpeakdistance = 6)
+      peaks_shape2 <- findpeaks(temp1$avg_shape2, nups = 5, ndowns = 1, minpeakdistance = 6)
+      peaks_shape3 <- findpeaks(temp1$avg_shape3, nups = 5, ndowns = 1, minpeakdistance = 6)
 
       ptf <- data.frame(trap_id = id, cell_entry = mother_cell_entry,
                         shape1 = ifelse(length(peaks_shape1) == 0, 0, length(peaks_shape1)),
