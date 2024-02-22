@@ -1,4 +1,4 @@
-MicroBREW_count <- function(filename, save_file){
+MicroBREW_count <- function(filename, save_file, norm_height){
 
   min_trap_size = 8000
   max_trap_size = 13000
@@ -31,7 +31,7 @@ MicroBREW_count <- function(filename, save_file){
     temp <- subset(table_xy, trap_new_ID == id)
     temp$avg_center <- movavg(temp$intensity_table3, n = 5, type = "s")
     temp$norm_signal <- temp$avg_center / temp$avg_center[temp$intensity_table1 == min(temp$intensity_table1)]
-    peaks_mother_cell <- findpeaks(temp$norm_signal, nups = 4, ndowns = 1, minpeakheight = 5)
+    peaks_mother_cell <- findpeaks(temp$norm_signal, nups = 4, ndowns = 1, minpeakheight = norm_height)
     mother_cell_entry <- temp$intensity_table1[peaks_mother_cell[1,2]]
     temp1 <- subset(temp, intensity_table1 >= mother_cell_entry)
     temp1$norm_signal <- NULL
